@@ -1,7 +1,7 @@
 ﻿
 namespace CarRentalApp
 {
-    partial class Form1
+    partial class AddRentalRecord
     {
         /// <summary>
         /// Variable del diseñador necesaria.
@@ -47,11 +47,11 @@ namespace CarRentalApp
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(199, 9);
+            this.label1.Location = new System.Drawing.Point(186, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(341, 51);
+            this.label1.Size = new System.Drawing.Size(354, 51);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Car Rental System";
+            this.label1.Text = "Add Rental Record";
             // 
             // tbCustomerName
             // 
@@ -153,7 +153,7 @@ namespace CarRentalApp
             this.lbCost.TabIndex = 11;
             this.lbCost.Text = "Cost";
             // 
-            // Form1
+            // AddRentalRecord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -170,8 +170,8 @@ namespace CarRentalApp
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbCustomerName);
             this.Controls.Add(this.label1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "AddRentalRecord";
+            this.Text = "Add Rental Record";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
