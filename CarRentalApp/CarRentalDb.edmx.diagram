@@ -8,6 +8,11 @@
         <EntityTypeShape EntityType="CarRentalModel.CarRentalRecord" Width="1.5" PointX="3" PointY="1" />
         <EntityTypeShape EntityType="CarRentalModel.TypesOfCars" Width="1.5" PointX="0.75" PointY="1" />
         <AssociationConnector Association="CarRentalModel.FK_CarRentalRecord_TypesOfCars" />
+        <EntityTypeShape EntityType="CarRentalModel.Roles" Width="1.5" PointX="0.75" PointY="8" />
+        <EntityTypeShape EntityType="CarRentalModel.UserRoles" Width="1.5" PointX="3" PointY="4.875" />
+        <EntityTypeShape EntityType="CarRentalModel.Users" Width="1.5" PointX="0.75" PointY="4.875" />
+        <AssociationConnector Association="CarRentalModel.FK_UserRoles_Roles" />
+        <AssociationConnector Association="CarRentalModel.FK_UserRoles_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

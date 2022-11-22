@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using Microsoft.VisualBasic.CompilerServices;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +14,20 @@ namespace CarRentalApp
 {
     public partial class MainWindow : Form
     {
+        private Login _login;
+        public string _roleName;
+        public Users _user;
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public MainWindow(Login login, Users user)
+        {
+            InitializeComponent();
+            _login = login;
+            _user = user;
+            _roleName = user.UserRoles.FirstOrDefault().Roles.shortname;
         }
 
         private void addRentalRecordToolStripMenuItem_Click(object sender, EventArgs e)
@@ -42,9 +55,52 @@ namespace CarRentalApp
 
         private void viewArchiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var manageRentalRecords =new ManageRentalRecords();
-            manageRentalRecords.MdiParent = this;
-            manageRentalRecords.Show();
+            Form[] children = this.MdiChildren;
+
+            var query = children.Select(c => c).Where(c => c is ManageRentalRecords).ToList();
+
+            if (query.Count == 0)
+            {
+                var manageRentalRecords = new ManageRentalRecords();
+                manageRentalRecords.MdiParent = this;
+                manageRentalRecords.Show();
+            }
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            if (_user.password == Utils.DefaultHashPassword())
+            {
+                var resetPassword = new ResetPassword(_user);
+                resetPassword.ShowDialog();
+            }
+
+            var username = _user.user;
+            tsLoginRole.Text = $"Logged in as: {username}";
+            if (_roleName != "admin")
+            {
+                manageUsersToolStripMenuItem.Visible = false;
+            }
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _login.Close();
+        }
+
+        private void manageUsersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form[] children = this.MdiChildren;
+
+            var query = children.Select(c => c).Where(c => c is ManageUsers).ToList();
+
+            if (query.Count == 0)
+            {
+                var manageUsers = new ManageUsers();
+                manageUsers.MdiParent = this;
+                manageUsers.Show();
+            }
+                
         }
     }
 }
