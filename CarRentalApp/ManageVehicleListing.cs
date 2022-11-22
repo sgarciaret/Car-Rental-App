@@ -26,26 +26,96 @@ namespace CarRentalApp
             //    .ToList();
 
             var cars = _db.TypesOfCars
-                .Select(q => new { Make = q.Make, Model = q.Model, VIN = q.VIN, Year = q.Year, LicensePlateNumber = q.LicensePlateNumber })
+                .Select(q => new { Make = q.Make, Model = q.Model, VIN = q.VIN, Year = q.Year, LicensePlateNumber = q.LicensePlateNumber, q.Id })
                 .ToList();
             gvVehicleList.DataSource = cars;
+            gvVehicleList.Columns[4].HeaderText = "License Plate Number";
+            gvVehicleList.Columns[5].Visible= false;
             //gvVehicleList.Columns[0].HeaderText = "ID";
             //gvVehicleList.Columns[1].HeaderText = "NAME";
         }
 
         private void btnAddCar_Click(object sender, EventArgs e)
         {
-
+            AddEditVehicle addEditVehicle = new AddEditVehicle();
+            addEditVehicle.MdiParent = this.MdiParent;
+            addEditVehicle.Show();
         }
 
         private void btnEditCar_Click(object sender, EventArgs e)
         {
+            try
+            {
+                // get id of selected row
+                var id = (int)gvVehicleList.SelectedRows[0].Cells["Id"].Value;
 
+                // query database for record
+                var car = _db.TypesOfCars.FirstOrDefault(q => q.Id == id);
+
+                // launch AddEditVehicle window with data
+                var addEditVehicle = new AddEditVehicle(car, this);
+                addEditVehicle.MdiParent = this.MdiParent;
+                addEditVehicle.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         private void btnDeleteCar_Click(object sender, EventArgs e)
         {
+            try
+            {
+                // get id of selected row
+                var id = (int)gvVehicleList.SelectedRows[0].Cells["Id"].Value;
 
+                // query database for record
+                var car = _db.TypesOfCars.FirstOrDefault(q => q.Id == id);
+
+                DialogResult dr = MessageBox.Show("Are you sure you want to delete this record?", "Delete", 
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                if (dr == DialogResult.Yes)
+                {
+                    // delete vehicle from table
+                    _db.TypesOfCars.Remove(car);
+                    _db.SaveChanges();
+                }
+                PopulateGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+            
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            PopulateGrid();
+        }
+
+        public void PopulateGrid()
+        {
+            // Select a custom model collection of cars from database
+            var cars = _db.TypesOfCars
+                .Select(q => new
+                {
+                    Make = q.Make,
+                    Model = q.Model,
+                    VIN = q.VIN,
+                    Year = q.Year,
+                    LicensePlateNumber = q.LicensePlateNumber,
+                    q.Id
+                })
+                .ToList();
+            gvVehicleList.DataSource = cars;
+            gvVehicleList.Columns[4].HeaderText = "License Plate Number";
+            //Hide the column for ID. Changed from the hard coded column value to the name, 
+            // to make it more dynamic. 
+            gvVehicleList.Columns["Id"].Visible = false;
         }
     }
 }
